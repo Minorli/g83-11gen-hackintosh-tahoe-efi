@@ -24,14 +24,14 @@
 | 蓝牙 | ✅ | IntelBluetoothFirmware + BlueToolFixup |
 | 有线网卡 | ✅ | IntelMausi |
 | USB | ✅ | USBToolBox + UTBMap 定制端口表 |
-| 内屏（息屏）唤醒 | ✅ | `-wex-dcoff` 保证熄屏后可恢复 |
-| 内屏亮度 | ✅ | `-wex-blfix` 根治开局亮度偏低 |
+| 内屏（息屏）唤醒 | ✅ | 熄屏后可正常恢复 |
+| 内屏亮度 | ✅ | 已修复开局亮度偏低 |
 | `Fn` 亮度快捷键 | ✅ | BrightnessKeys |
-| 声卡（扬声器 / 耳机） | ✅ | ALC257，`alcid=11` |
+| 声卡（扬声器 / 耳机） | ✅ | ALC257 |
 | 电池状态 | ✅ | SMCBatteryManager |
 | GPU 加速（Metal） | ✅ | WhateverXe 注入驱动 |
 | H.264 / HEVC 硬解 | ✅ | 核显媒体引擎 |
-| 外接 HDMI 4K@60Hz | ✅ | 稳定无黑闪（`-wex-hdmi-clock600` + `-wex-hdmi-scdc-write`） |
+| 外接 HDMI 4K@60Hz | ✅ | 稳定无黑闪 |
 
 ## 3. 已知问题
 
@@ -51,4 +51,4 @@ sudo pmset -a disablesleep 1
 1. 用磁盘工具（或 `diskutil mount diskXs1`）挂载 EFI 分区，把本仓库的 `EFI` 覆盖过去（机器自带的 Windows 引导目录可保留不动）。
 2. BIOS 设置：关闭 **Secure Boot**即可启动（其他项保持默认）。
 3. **三码替换（必做一次）**：`config.plist` 的 `PlatformInfo→Generic` 中 `SystemSerialNumber / MLB / SystemUUID / ROM` 均为空——请用 [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) 选择 `MacBookPro16,2` 生成后再填入；`ROM` 填 12 位随机 MAC，或从另一台真 Mac 抓取（iMessage 更容易通）。**请勿直接使用网络/他人已发布的 serial**。
-4. BOOT-ARGS 已按最小集配置，一般无需添加；如遇排障可临时加上 `-wex-hdmi-diag` 等诊断参数（见 [WhateverXe-Dynabook 仓库](https://github.com/xiananliu/WhateverXe-Dynabook) 的 README）。
+4. BOOT-ARGS 已按最小集配置，一般无需添加；需要排障时再手动开启诊断参数（详见 [WhateverXe-Dynabook 仓库](https://github.com/xiananliu/WhateverXe-Dynabook) 的 README）。
