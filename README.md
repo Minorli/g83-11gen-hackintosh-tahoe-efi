@@ -4,7 +4,7 @@
 
 ## 1. 最低系统要求
 
-- **macOS Tahoe 26.7 或更新**（上游 WhateverXe 对 Tahoe 的门槛即 26.7+；本机在 26.7.x 实测通过）
+- **macOS Tahoe 26.7 或更新**（上游 WhateverXe 对 Tahoe 的门槛即 26.7+；本机 26.7.2 实测通过）
 - OpenCore 1.0.8 RELEASE 或等价版本
 
 ## 2. 机型信息
