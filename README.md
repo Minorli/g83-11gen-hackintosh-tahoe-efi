@@ -1,5 +1,10 @@
 # g83-11gen-hackintosh-tahoe-efi
 
+> **本机的黑苹果方案被 B 站 UP 主「老张是大佬」点名**（见下图）——群友就是我，**五菱宏光s** 🎉
+> 后续动态欢迎关注我的抖音：**五菱宏光s**
+>
+> ![老张点名的五菱宏光s](docs/laozhang-mention.jpeg)
+
 东芝 dynabook G83/HS（11 代 Tiger Lake）黑苹果 EFI，目标系统 macOS Tahoe（26.x）。基于 OpenCore 1.0.8 RELEASE。
 
 ## 1. 最低系统要求
