@@ -6,8 +6,6 @@
 
 东芝 dynabook G83/HS（11 代 Tiger Lake）黑苹果 EFI，目标系统 macOS Tahoe（26.x）。基于 OpenCore 1.0.8 RELEASE。
 
-东芝 dynabook G83/HS（11 代 Tiger Lake）黑苹果 EFI，目标系统 macOS Tahoe（26.x）。基于 OpenCore 1.0.8 RELEASE。
-
 ## 1. 最低系统要求
 
 - **macOS Tahoe 26.7 或更新**（上游 WhateverXe 对 Tahoe 的门槛即 26.7+；本机 26.7.2 实测通过）
