@@ -86,6 +86,7 @@ sudo pmset -a disablesleep 1
 | [OpenCore](https://github.com/acidanthera/OpenCorePkg) | 引导程序（本仓库用 1.0.8 RELEASE） |
 | [Lilu](https://github.com/acidanthera/Lilu) | 内核补丁框架 |
 | [WhateverXe](https://github.com/b00t0x/WhateverXe) | 本机核显驱动的上游（BSD-3-Clause，本仓库 LICENSE 继承其许可体系） |
+| [WhateverXe Graphics](https://github.com/b00t0x/WhateverXe-Graphics) | 核显运行组件（首次进系统必装，见使用说明第 4 条） |
 | [WhateverXe-Dynabook](https://github.com/xiananliu/WhateverXe-Dynabook) | 本机使用的 WhateverXe 下游修改版（驱动改进细节见其 README） |
 | [VirtualSMC](https://github.com/acidanthera/VirtualSMC) | SMC 模拟（含电池/传感器插件） |
 | [AppleALC](https://github.com/acidanthera/AppleALC) | 声卡驱动 |
