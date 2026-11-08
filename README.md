@@ -53,18 +53,18 @@ sudo pmset -a disablesleep 1
 
 ## 5. WEX（WhateverXe）改进点
 
-本机在开源 [WhateverXe](https://github.com/b00t0x/WhateverXe) 0.7.0 基础上做的下游改进（完整细节见 [WhateverXe-Dynabook](https://github.com/xiananliu/WhateverXe-Dynabook)）：
+在本机使用的开源图形驱动 [WhateverXe](https://github.com/b00t0x/WhateverXe) 基础上做的下游修复（完整细节见 [WhateverXe-Dynabook](https://github.com/xiananliu/WhateverXe-Dynabook)）：
 
-| 改进 | 解决的问题 |
-|------|-----------|
-| HDMI 模式上限 300→600MHz | 外接 HDMI 可输出 4K@60Hz |
-| SCDC scrambling 写入（sink 端握手修正） | 4K60 黑闪根治 |
-| CDCLK 修正 | 内屏 eDP 黑屏（概率性不亮） |
-| 背光量纲修正 | 开机亮度偏低 |
-| DC6/DC9 深断电绕过 | 熄屏后无法唤醒 |
-| 80-EU 核显资源剖面修正 | 本机核显不被上游白名单拒绝，GPU 加速可用 |
+| 解决的问题 |
+|-----------|
+| 外接 HDMI 可输出 4K@60Hz |
+| 4K@60 黑闪（每几秒黑屏数秒）根治 |
+| 内屏 eDP 偶发不亮／点亮后失效 |
+| 开机亮度偏低 |
+| 熄屏后无法唤醒 |
+| 本机核显（80-EU）在此驱动下加速可用 |
 
-排障/实验用的探针与数据分析项已从发布版配置中移除，不属于本仓库内容。
+排障用探针与实验项已从发布版配置中移除，不属于本仓库内容。
 
 ## 6. 使用说明
 
