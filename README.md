@@ -77,6 +77,7 @@ sudo pmset -a disablesleep 1
 1. 用磁盘工具（或 `diskutil mount diskXs1`）挂载 EFI 分区，把本仓库的 `EFI` 覆盖过去（机器自带的 Windows 引导目录可保留不动）。
 2. BIOS 设置：关闭 **Secure Boot**即可启动（其他项保持默认）。
 3. **三码替换（必做一次）**：`config.plist` 的 `PlatformInfo→Generic` 中 `SystemSerialNumber / MLB / SystemUUID / ROM` 均为空——请用 [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) 选择 `MacBookPro16,2` 生成后再填入；`ROM` 填 12 位随机 MAC，或从另一台真 Mac 抓取（iMessage 更容易通）。**请勿直接使用网络/他人已发布的 serial**。
+4. **安装核显运行组件（必装）**：第一次成功进入系统后，到 [WhateverXe Graphics Releases](https://github.com/b00t0x/WhateverXe-Graphics/releases) 下载最新 **pkg** 安装，然后重启——不装的话核显加速不完整。
 
 ## 7. 关联项目
 
