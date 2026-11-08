@@ -16,21 +16,35 @@
 
 不适配其他机型的部分（SSDT / USB 定制表 / WEX 参数）请按需自行调整。
 
-## 2. 已正常功能
+## 2. 正常功能
 
-- USB、电池状态、内置键盘
-- 触摸板（I2C HID）+ 触摸板手势（VoodooRMI/VoodooI2C）
-- 内屏 eDP 显示、开局亮度、`Fn` 亮度键
-- GPU 加速（Metal）
-- **外接 HDMI 4K@60Hz 稳定输出**（黑闪已根治）✅
-- 声卡：扬声器 / 耳机 / 内置麦克风（`alcid=11`）
-- Wi-Fi（AirportItlwm）/ 蓝牙（Intel）/ 有线网卡（IntelMausi）
+| 功能 | 状态 | 说明 |
+|------|------|------|
+| Wi-Fi | ✅ | AirportItlwm（Intel 无线网卡） |
+| 蓝牙 | ✅ | IntelBluetoothFirmware + BlueToolFixup |
+| 有线网卡 | ✅ | IntelMausi |
+| USB | ✅ | USBToolBox + UTBMap 定制端口表 |
+| 内屏（息屏）唤醒 | ✅ | `-wex-dcoff` 保证熄屏后可恢复 |
+| 内屏亮度 | ✅ | `-wex-blfix` 根治开局亮度偏低 |
+| `Fn` 亮度快捷键 | ✅ | BrightnessKeys |
+| 声卡（扬声器 / 耳机） | ✅ | ALC257，`alcid=11` |
+| 电池状态 | ✅ | SMCBatteryManager |
+| GPU 加速（Metal） | ✅ | WhateverXe 注入驱动 |
+| H.264 / HEVC 硬解 | ✅ | 核显媒体引擎 |
+| 外接 HDMI 4K@60Hz | ✅ | 稳定无黑闪（`-wex-hdmi-clock600` + `-wex-hdmi-scdc-write`） |
 
 ## 3. 已知问题
 
-- **系统睡眠已禁用**（`sleep 0`）：S3 挂起在 Intel WiFi / 触控板 I2C / 本驱动的组合下目前不可用，请勿重新打开系统睡眠；熄屏（显示器关闭后）唤醒已通过 `-wex-dcoff` 解决。
-- Wi-Fi 延迟偶发波动（5GHz 高带宽信道下 ping 波动大），与显示驱动无关。
-- Realtek 读卡器未驱动（kext 已禁用）。
+| 问题 | 现状 / 处理 |
+|------|------------|
+| 内置麦克风 | 不工作，使用外接或耳机麦克风 |
+| 无法睡眠唤醒 | 通过禁用系统睡眠解决，执行以下命令即可： |
+
+```bash
+sudo pmset -a sleep 0
+sudo pmset -a hibernatemode 0
+sudo pmset -a disablesleep 1
+```
 
 ## 4. 使用说明
 
