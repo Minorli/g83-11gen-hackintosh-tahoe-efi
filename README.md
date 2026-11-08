@@ -73,3 +73,23 @@ sudo pmset -a disablesleep 1
 1. 用磁盘工具（或 `diskutil mount diskXs1`）挂载 EFI 分区，把本仓库的 `EFI` 覆盖过去（机器自带的 Windows 引导目录可保留不动）。
 2. BIOS 设置：关闭 **Secure Boot**即可启动（其他项保持默认）。
 3. **三码替换（必做一次）**：`config.plist` 的 `PlatformInfo→Generic` 中 `SystemSerialNumber / MLB / SystemUUID / ROM` 均为空——请用 [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) 选择 `MacBookPro16,2` 生成后再填入；`ROM` 填 12 位随机 MAC，或从另一台真 Mac 抓取（iMessage 更容易通）。**请勿直接使用网络/他人已发布的 serial**。
+
+## 7. 关联项目
+
+| 项目 | 说明 |
+|------|------|
+| [OpenCore](https://github.com/acidanthera/OpenCorePkg) | 引导程序（本仓库用 1.0.8 RELEASE） |
+| [Lilu](https://github.com/acidanthera/Lilu) | 内核补丁框架 |
+| [WhateverXe](https://github.com/b00t0x/WhateverXe) | 本机核显驱动的上游（BSD-3-Clause，本仓库 LICENSE 继承其许可体系） |
+| [WhateverXe-Dynabook](https://github.com/xiananliu/WhateverXe-Dynabook) | 本机使用的 WhateverXe 下游修改版（驱动改进细节见其 README） |
+| [VirtualSMC](https://github.com/acidanthera/VirtualSMC) | SMC 模拟（含电池/传感器插件） |
+| [AppleALC](https://github.com/acidanthera/AppleALC) | 声卡驱动 |
+| [AirportItlwm](https://github.com/OpenIntelWireless/itlwm) | Intel Wi-Fi 驱动 |
+| [IntelBluetoothFirmware](https://github.com/OpenIntelWireless/IntelBluetoothFirmware) | Intel 蓝牙驱动 |
+| [IntelMausi](https://github.com/acidanthera/IntelMausi) | Intel 有线网卡驱动 |
+| [VoodooI2C](https://github.com/VoodooI2C/VoodooI2C) / [VoodooRMI](https://github.com/1Revenger1/VoodooRMI) / [VoodooPS2Controller](https://github.com/acidanthera/VoodooPS2) | 触摸板 / 键盘输入栈 |
+| [USBToolBox](https://github.com/USBToolBox/kext) | USB 端口定制 |
+| [BrightnessKeys](https://github.com/acidanthera/BrightnessKeys) | 亮度快捷键 |
+| [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) | 三码生成工具（使用说明第 3 条用到） |
+
+本仓库许可见 [LICENSE](LICENSE)（BSD-3-Clause）；仓库内 OpenCore / kext 等二进制组件版权仍归各自上游。
