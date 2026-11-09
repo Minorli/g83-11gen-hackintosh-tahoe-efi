@@ -60,7 +60,7 @@ sudo pmset -a disablesleep 1
 
 ## 5. WEX（WhateverXe）改进点
 
-在本机使用的开源图形驱动 [WhateverXe](https://github.com/b00t0x/WhateverXe) 基础上做的下游修复（完整细节见 [WhateverXe-Dynabook](https://github.com/xiananliu/WhateverXe-Dynabook)）：
+在本机使用的开源图形驱动 [WhateverXe](https://github.com/b00t0x/WhateverXe) 基础上做的下游修复（完整细节见 [wex-modified-edition](https://github.com/xiananliu/wex-modified-edition)）：
 
 | 解决的问题 |
 |-----------|
@@ -89,7 +89,7 @@ sudo pmset -a disablesleep 1
 | [Lilu](https://github.com/acidanthera/Lilu) | 内核补丁框架 |
 | [WhateverXe](https://github.com/b00t0x/WhateverXe) | 本机核显驱动的上游（BSD-3-Clause，本仓库 LICENSE 继承其许可体系） |
 | [WhateverXe Graphics](https://github.com/b00t0x/WhateverXe-Graphics) | 核显运行组件（首次进系统必装，见使用说明第 4 条） |
-| [WhateverXe-Dynabook](https://github.com/xiananliu/WhateverXe-Dynabook) | 本机使用的 WhateverXe 下游修改版（驱动改进细节见其 README） |
+| [wex-modified-edition](https://github.com/xiananliu/wex-modified-edition) | 本机使用的 WhateverXe 下游修改版（驱动改进细节见其 README） |
 | [VirtualSMC](https://github.com/acidanthera/VirtualSMC) | SMC 模拟（含电池/传感器插件） |
 | [AppleALC](https://github.com/acidanthera/AppleALC) | 声卡驱动 |
 | [SimpleHDA](https://github.com/laobamac/SimpleHDA) | macOS Tahoe 原版 AppleHDA 恢复插件（本 EFI 已配置） |
