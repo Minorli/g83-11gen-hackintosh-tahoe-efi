@@ -4,11 +4,19 @@
 >
 > ![老张点名的五菱宏光s](docs/laozhang-mention.jpeg)
 
-东芝 dynabook G83/HS（11 代 Tiger Lake）黑苹果 EFI，目标系统 macOS Tahoe（26.x）。基于 OpenCore 1.0.8 RELEASE。
+东芝 dynabook G83/HS（11 代 Tiger Lake）黑苹果 EFI，支持 macOS Sequoia（15.8.x）与 macOS Tahoe（26.7+）。基于 OpenCore 1.0.8 RELEASE。
 
 ## 1. 最低系统要求
 
-- **macOS Tahoe 26.7 或更新**（上游 WhateverXe 对 Tahoe 的门槛即 26.7+；本机 26.7.2 实测通过）
+本 EFI 同时支持两个系统版本（网卡驱动 SimpleHDA / AirportItlwm 已按内核版本自动分流加载）：
+
+| 系统 | 版本 |
+|------|------|
+| macOS Sequoia | 15.8.x |
+| macOS Tahoe | 26.7 或更新 |
+
+- Tahoe：上游 WhateverXe 对 Tahoe 的门槛即 26.7+（本机 26.7.2 实测通过）
+- Sequoia：macOS 15.8.x 实测通过
 - OpenCore 1.0.8 RELEASE 或等价版本
 
 ## 2. 机型信息
@@ -21,7 +29,7 @@
 | 网卡 | Intel Wi-Fi 6 + 蓝牙 + 有线 |
 | 声卡 | Realtek ALC257 |
 | SMBIOS | MacBookPro16,2 |
-| 系统 | macOS Tahoe 26.x |
+| 系统 | macOS Sequoia 15.8.x / Tahoe 26.x |
 
 不适配其他机型的部分（SSDT / USB 定制表 / WEX 参数）请按需自行调整。
 
