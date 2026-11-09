@@ -42,13 +42,13 @@
 | H.264 / HEVC 硬解 | ✅ | 核显媒体引擎 |
 | 外接 HDMI 4K@60Hz | ✅ | 稳定无黑闪 |
 | 摄像头 | ✅ | 内置摄像头 |
+| 内置麦克风 | ✅ | TGLDmic，系统显示为 Internal Microphone (TGLDmic) |
 | 外接 Type-C 扩展坞视频输出 | ✅ | 实测 4K@30Hz |
 
 ## 4. 已知问题
 
 | 问题 | 现状 / 处理 |
 |------|------------|
-| 内置麦克风 | 不工作，使用外接或耳机麦克风 |
 | App Store 内视频播放卡死 | 来自上游 WhateverXe 驱动的问题，与本仓库配置无关 |
 | 无法睡眠唤醒 | 通过禁用系统睡眠解决，执行以下命令即可： |
 
@@ -79,6 +79,7 @@ sudo pmset -a disablesleep 1
 2. BIOS 设置：关闭 **Secure Boot**即可启动（其他项保持默认）。
 3. **三码替换（必做一次）**：`config.plist` 的 `PlatformInfo→Generic` 中 `SystemSerialNumber / MLB / SystemUUID / ROM` 均为空——请用 [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) 选择 `MacBookPro16,2` 生成后再填入；`ROM` 填 12 位随机 MAC，或从另一台真 Mac 抓取（iMessage 更容易通）。**请勿直接使用网络/他人已发布的 serial**。
 4. **安装核显运行组件（必装）**：第一次成功进入系统后，到 [WhateverXe Graphics Releases](https://github.com/b00t0x/WhateverXe-Graphics/releases) 下载最新 **pkg** 安装，然后重启——不装的话核显加速不完整。
+5. **安装内置麦克风组件（必装）**：EFI 已包含 `TGLDmic.kext` 并启用 `-tgldmic`。进入系统后，到 [TGLDmic v0.5.0 Releases](https://github.com/labrouss/TGLDmic/releases/tag/v0.5.0) 下载并打开 [`TGLDmic-0.5.0.pkg`](https://github.com/labrouss/TGLDmic/releases/download/v0.5.0/TGLDmic-0.5.0.pkg) 安装 Core Audio 插件。安装后在“系统设置 → 声音 → 输入”选择 **Internal Microphone (TGLDmic)**。若 macOS 阻止打开安装包，请在“隐私与安全性”中允许，或在 Finder 中右键选择“打开”。
 
 ## 7. 关联项目
 
@@ -91,6 +92,8 @@ sudo pmset -a disablesleep 1
 | [WhateverXe-Dynabook](https://github.com/xiananliu/WhateverXe-Dynabook) | 本机使用的 WhateverXe 下游修改版（驱动改进细节见其 README） |
 | [VirtualSMC](https://github.com/acidanthera/VirtualSMC) | SMC 模拟（含电池/传感器插件） |
 | [AppleALC](https://github.com/acidanthera/AppleALC) | 声卡驱动 |
+| [SimpleHDA](https://github.com/laobamac/SimpleHDA) | macOS Tahoe 原版 AppleHDA 恢复插件（本 EFI 已配置） |
+| [TGLDmic](https://github.com/labrouss/TGLDmic) | Tiger Lake 数字麦克风驱动（BSD-3-Clause；版权归 labrouss 与 TGLDmic contributors；EFI 内含 kext，系统内需安装 HAL pkg） |
 | [AirportItlwm](https://github.com/OpenIntelWireless/itlwm) | Intel Wi-Fi 驱动 |
 | [IntelBluetoothFirmware](https://github.com/OpenIntelWireless/IntelBluetoothFirmware) | Intel 蓝牙驱动 |
 | [IntelMausi](https://github.com/acidanthera/IntelMausi) | Intel 有线网卡驱动 |
@@ -99,7 +102,7 @@ sudo pmset -a disablesleep 1
 | [BrightnessKeys](https://github.com/acidanthera/BrightnessKeys) | 亮度快捷键 |
 | [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) | 三码生成工具（使用说明第 3 条用到） |
 
-本仓库许可见 [LICENSE](LICENSE)（BSD-3-Clause）；仓库内 OpenCore / kext 等二进制组件版权仍归各自上游。
+本仓库许可见 [LICENSE](LICENSE)（BSD-3-Clause）；仓库内 OpenCore / kext 等二进制组件版权仍归各自上游。TGLDmic 内嵌 SOF 固件另适用 Intel 许可，见 [LICENCE.Intel](docs/TGLDmic/LICENCE.Intel)。
 
 ## 8. 版本与更新
 
