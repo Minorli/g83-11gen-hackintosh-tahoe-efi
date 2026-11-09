@@ -999,13 +999,13 @@
 				<key>BundlePath</key>
 				<string>ECEnabler.kext</string>
 				<key>Comment</key>
-				<string></string>
+				<string>多字节 EC 字段读取修复电量百分比 仅 Sequoia(≤24) 及以下,Tahoe 无需</string>
 				<key>Enabled</key>
-				<false/>
+				<true/>
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/ECEnabler</string>
 				<key>MaxKernel</key>
-				<string></string>
+				<string>24.9.9</string>
 				<key>MinKernel</key>
 				<string></string>
 				<key>PlistPath</key>
