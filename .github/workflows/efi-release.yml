@@ -1,0 +1,64 @@
+name: EFI release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'EFI/**'
+      - 'VERSION'
+      - '.github/workflows/efi-release.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read version
+        id: ver
+        run: |
+          V=$(tr -d '[:space:]' < VERSION)
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          echo "本次版本: $V"
+
+      - name: Check tag
+        id: tag
+        run: |
+          if git rev-parse -q --verify "refs/tags/${{ steps.ver.outputs.version }}" >/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "tag ${{ steps.ver.outputs.version }} 已存在，本次跳过发布"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Package EFI
+        if: steps.tag.outputs.exists == 'false'
+        run: |
+          V=${{ steps.ver.outputs.version }}
+          zip -qr "EFI-$V.zip" EFI
+          sha256sum "EFI-$V.zip" > "EFI-$V.zip.sha256"
+          cat "EFI-$V.zip.sha256"
+
+      - name: Create release
+        if: steps.tag.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V=${{ steps.ver.outputs.version }}
+          {
+            echo "Toshiba dynabook G83/HS Hackintosh EFI，版本 $V。"
+            echo
+            echo "- 变更详情见自上一 tag 以来的提交记录"
+            echo "- 使用方法见 [README](https://github.com/xiananliu/g83-11gen-hackintosh-tahoe-efi#readme)（三码需自行生成）"
+            echo "- WEX 驱动版本与改进点说明见 [wex-modified-edition releases](https://github.com/xiananliu/wex-modified-edition/releases)"
+          } > notes.md
+          gh release create "$V" \
+            --target "$GITHUB_SHA" \
+            --title "$V" \
+            --notes-file notes.md \
+            "EFI-$V.zip" "EFI-$V.zip.sha256"

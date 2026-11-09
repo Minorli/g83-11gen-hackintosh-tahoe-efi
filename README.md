@@ -101,3 +101,7 @@ sudo pmset -a disablesleep 1
 | [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) | 三码生成工具（使用说明第 3 条用到） |
 
 本仓库许可见 [LICENSE](LICENSE)（BSD-3-Clause）；仓库内 OpenCore / kext 等二进制组件版权仍归各自上游。
+
+## 8. 版本与更新
+
+EFI 目录每次更新会自动打 tag 并发布到 [Releases](https://github.com/xiananliu/g83-11gen-hackintosh-tahoe-efi/releases)（附打包好的 EFI zip 与校验文件），版本号从 1.0.0 起，变更见各 release 说明与提交记录。
