@@ -104,4 +104,4 @@ sudo pmset -a disablesleep 1
 
 ## 8. 版本与更新
 
-EFI 目录每次更新会自动打 tag 并发布到 [Releases](https://github.com/xiananliu/g83-11gen-hackintosh-tahoe-efi/releases)（附打包好的 EFI zip 与校验文件），版本号以 Releases 为准，采用四段式编号：前三位对应 WEX 驱动上游版本，末位为本仓库修订号。变更见各 release 说明与提交记录。
+EFI 目录每次更新会自动打 tag 并发布到 [Releases](https://github.com/xiananliu/g83-11gen-hackintosh-tahoe-efi/releases)（附打包好的 EFI zip 与校验文件），变更见各 release 说明与提交记录。
