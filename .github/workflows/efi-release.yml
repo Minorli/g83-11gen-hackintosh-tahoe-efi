@@ -1,11 +1,7 @@
 name: EFI release
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'VERSION'
-      - '.github/workflows/efi-release.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -14,7 +10,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
 
@@ -22,6 +18,7 @@ jobs:
         id: ver
         run: |
           V=$(tr -d '[:space:]' < VERSION)
+          [[ "$V" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]] || exit 1
           echo "version=$V" >> "$GITHUB_OUTPUT"
           echo "本次版本: $V"
 
@@ -50,11 +47,12 @@ jobs:
         run: |
           V=${{ steps.ver.outputs.version }}
           {
-            echo "Toshiba dynabook G83/HS Hackintosh EFI，版本 $V。"
+            echo "Dynabook G83 / i7-1165G7 开发预发布，版本 $V。"
             echo
             echo "- 变更详情见自上一 tag 以来的提交记录"
-            echo "- 使用方法见 [README](https://github.com/xiananliu/g83-11gen-hackintosh-tahoe-efi#readme)（三码需自行生成）"
-            echo "- WEX 驱动版本与改进点说明见 [wex-modified-edition releases](https://github.com/xiananliu/wex-modified-edition/releases)"
+            echo "- 使用方法见 [README](https://github.com/${GITHUB_REPOSITORY}#readme)（三码需自行生成）"
+            echo "- 组件来源及版本边界见 [Provenance](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_SHA}/docs/Provenance.md)"
+            echo "- 图形内存、闪屏与队列稳定性仍在修复，详见维护路线。"
             echo
             echo "## 三码提醒（重要）"
             echo
@@ -62,6 +60,7 @@ jobs:
             echo "- **升级覆盖**：请勿直接用包内的空三码 `config.plist` 覆盖你已生成过的三码！保留你自己机器的 \`SystemSerialNumber / MLB / SystemUUID / ROM\`"
           } > notes.md
           gh release create "$V" \
+            --prerelease \
             --target "$GITHUB_SHA" \
             --title "$V" \
             --notes-file notes.md \

@@ -1,118 +1,80 @@
-# g83-11gen-hackintosh-tahoe-efi
+# Dynabook G83 · macOS
 
-> **本机的黑苹果方案被 B 站 UP 主「老张是大佬」点名**（见下图，字幕里的群友五菱宏光s 就是我），在此存个纪念：一个垃圾佬 DIY 的完整成果。
->
-> ![老张点名的五菱宏光s](docs/laozhang-mention.jpeg)
+面向 **Intel Core i7-1165G7 / Iris Xe 96EU** 实机持续维护的 OpenCore EFI。
+本仓库的 `main` 是该机器的主迭代线路：记录硬件、保存可追溯配置、逐项验证功能，
+将通用修复独立回送上游。
 
-东芝 dynabook G83/HS（11 代 Tiger Lake）黑苹果 EFI，支持 macOS Sequoia（15.8.x）与 macOS Tahoe（26.7+）。基于 OpenCore 1.0.8 RELEASE。
+**当前处于开发与稳定性修复阶段。** 图形加速已经可用，但远程视频负载仍能触发闪屏，
+曾发生 GPU 队列卡死与强制关机；WindowServer 内存增长尚未获得全局修复。
+不能将“可以启动、Metal 测试通过”视为日常稳定性验收完成。
 
-## 1. 最低系统要求
+## 目标硬件
 
-本 EFI 同时支持两个系统版本（网卡驱动 SimpleHDA / AirportItlwm 已按内核版本自动分流加载）：
-
-| 系统 | 版本 |
-|------|------|
-| macOS Sequoia | 15.8.x |
-| macOS Tahoe | 26.7 或更新 |
-
-- Tahoe：上游 WhateverXe 对 Tahoe 的门槛即 26.7+（本机 26.7.2 实测通过）
-- Sequoia：macOS 15.8.x 实测通过
-- OpenCore 1.0.8 RELEASE 或等价版本
-
-## 2. 机型信息
-
-| 项目 | 值 |
-|------|-----|
-| 机器 | Toshiba dynabook G83/HS（Tiger Lake U 笔记本） |
-| CPU | Intel Core i5-1135G7 |
-| 核显 | Iris Xe 80EU（`0x9A49`），WhateverXe + Lilu 注入驱动 |
-| 网卡 | Intel Wi-Fi 6 + 蓝牙 + 有线 |
+| 项目 | 本机检测结果 |
+| --- | --- |
+| 系列 | Dynabook G83，11 代 Tiger Lake；具体机身子型号待核对铭牌 |
+| CPU | Intel Core i7-1165G7，4 核 / 8 线程 |
+| 核显 | Intel Iris Xe，96 EU，物理 `8086:9A49` revision `01` |
+| 内存 | 24 GB |
+| 无线 | Intel Wi-Fi 6 AX201，`8086:A0F0` |
 | 声卡 | Realtek ALC257 |
-| SMBIOS | MacBookPro16,2 |
-| 系统 | macOS Sequoia 15.8.x / Tahoe 26.x |
+| 存储 | NVMe，当前协商 PCIe 3.0 ×4；TRIM 已启用 |
+| 引导 | OpenCore 1.0.8 RELEASE |
+| 当前实机系统 | macOS Tahoe 26.7.3（25G342），Darwin 25.6.0 |
+| SMBIOS | MacBookPro16,2；这是兼容身份，不是物理机型号 |
 
-不适配其他机型的部分（SSDT / USB 定制表 / WEX 参数）请按需自行调整。
+仓库保留了按内核版本分流的 Sequoia / Tahoe 组件，但本机这一轮仅验证 Tahoe。
+原方案在其他 CPU / 系统上的结果不作为本机验收结论。CPU 的 CPUID 兼容设置与
+物理型号是两回事；不会为了显示 i7 而随意改动启动所需的 CPUID 仿真。
 
-## 3. 正常功能
+## 功能状态
 
-| 功能 | 状态 | 说明 |
-|------|------|------|
-| Wi-Fi | ✅ | AirportItlwm；Tahoe 的 WPA2-Enterprise / PEAP 已在 AX201 实机验证，见 [企业认证修复记录](docs/AirportItlwm/README.md) |
-| 蓝牙 | ✅ | IntelBluetoothFirmware + BlueToolFixup |
-| 有线网卡 | ✅ | IntelMausi |
-| USB | ✅ | USBToolBox + UTBMap 定制端口表 |
-| 内屏（息屏）唤醒 | ✅ | 熄屏后可正常恢复 |
-| 内屏亮度 | ✅ | 已修复开局亮度偏低 |
-| `Fn` 亮度快捷键 | ✅ | BrightnessKeys |
-| 声卡（扬声器 / 耳机） | ✅ | ALC257 |
-| 电池状态 | ✅ | SMCBatteryManager |
-| GPU 加速（Metal） | ✅ | WhateverXe 注入驱动 |
-| H.264 / HEVC 硬解 | ✅ | 核显媒体引擎 |
-| 外接 HDMI 4K@60Hz | ✅ | 稳定无黑闪 |
-| 摄像头 | ✅ | 内置摄像头 |
-| 内置麦克风 | ✅ | TGLDmic，系统显示为 Internal Microphone (TGLDmic) |
-| 外接 Type-C 扩展坞视频输出 | ✅ | 实测 4K@30Hz |
+| 功能 | 当前状态与边界 |
+| --- | --- |
+| 启动、桌面与基础 Metal | 已在本机使用；不代表图形栈稳定 |
+| 图形内存 | 已复现命令缓冲相关泄漏；诊断进程原型有效，全局修复待审查 |
+| 远程画面与稳定性 | UU 显示远端画面后可复现闪屏；退出客户端后闪屏消失，内存不随之完全回收 |
+| GPU 队列 | 历史现场存在 BCS busy/hung 和重复恢复；根因与修复仍在调查 |
+| H.264 / HEVC 硬解 | 未验收；曾发生 VA 路径崩溃，本机 VA bundle 目前隔离 |
+| Wi-Fi | AX201 企业认证修订已在本机连接成功；吞吐和长期漫游尚未验收，见[无线说明](docs/AirportItlwm/README.md) |
+| 蓝牙 | 控制器与 USB 枚举正常；耳机、AirDrop、睡眠恢复需分别验证 |
+| USB | 主 XHCI 表含 16 个逻辑端口，实机只创建 15 个；SS04 未出现，待逐口重新映射 |
+| 音频与麦克风 | 驱动和输入设备已注册；每路录音、耳机切换、长时间使用仍需测试 |
+| 键盘与触控板 | 已使用；I2C 设备实际运行在 APIC 中断模式 |
+| 亮度与显示布局 | 保留当前工作配置及有意设置的双屏镜像；未声称外接 4K / 所有模式都已验收 |
+| 摄像头 | USB 设备已枚举；视频通话验收待完成 |
+| 电池 | 系统可报告状态；健康度读数需与固件或其他系统交叉核对 |
+| 系统睡眠 | 当前禁用；本机尚未测试唤醒，保留规避措施直至单独验收 |
 
-## 4. 已知问题
+## 使用与维护
 
-| 问题 | 现状 / 处理 |
-|------|------------|
-| 无法睡眠唤醒 | 通过禁用系统睡眠解决，执行以下命令即可： |
+1. 先备份已知可启动 EFI，并准备能实际进入的恢复入口。不同 G83 子型号的 ACPI、
+   USB 表和显示链路不能直接套用。
+2. 公开 `config.plist` 的身份字段保留为空值或全零占位。为自己的机器生成独立
+   `SystemSerialNumber`、`MLB`、`SystemUUID` 与 `ROM`；升级时保留本机身份。
+3. 按 [OpenCore 配置校验说明](docs/Config-validation.md) 使用匹配版本的 `ocvalidate`。
+   格式校验通过不能证明 ACPI、USB 映射、电源管理和图形稳定性正确。
+4. 显卡依赖 EFI 中的内核组件及系统中的图形运行组件。来源和版本边界见
+   [组件来源](docs/Provenance.md)。当前仓库没有自动安装或自动恢复被隔离 VA 的步骤。
+5. 一次只部署一个可回退的变更，记录源码版本、二进制 SHA-256、启动版本和实测结果。
+   不直接用公开配置覆盖正在工作的私人 EFI。
 
-```bash
-sudo pmset -a sleep 0
-sudo pmset -a hibernatemode 0
-sudo pmset -a disablesleep 1
-```
+本机不运行会覆盖现用图形组件的 OCLP 自动修补任务。系统睡眠保持当前策略；
+显示熄屏、系统睡眠和休眠需要分别验收。配置更新不会自动修改这些系统级设置。
 
-Tahoe 无线驱动采用 `4240f66` 企业认证修复构建，针对热点可连、802.1X 身份响应因 BSSID 查询失败而中断的问题。该补丁尚未被驱动上游合并；一次 PEAP 实测不代表所有企业网络、漫游与睡眠恢复均已验证。来源、源码、校验和回退方法见 [修复记录](docs/AirportItlwm/README.md)。Sequoia 驱动保持原版本。
+## 迭代方向
 
-## 5. WEX（WhateverXe）改进点
+优先解决图形内存增长、远程呈现闪屏和 BCS 卡死，再完成 USB 实机映射、
+固定负载下的功耗对照、音频 / 蓝牙与睡眠验收。完整巡检见[维护路线](docs/Maintenance.md)。
 
-在本机使用的开源图形驱动 [WhateverXe](https://github.com/b00t0x/WhateverXe) 基础上做的下游修复（完整细节见 [wex-modified-edition](https://github.com/xiananliu/wex-modified-edition)）：
+独立显卡项目为 [WhateverXe-Next](https://github.com/Minorli/WhateverXe-Next)，
+集中维护可审查源码、诊断工具与脱敏验证材料；本仓库负责 G83 的整机集成。
+验证充分的通用修复使用单独分支提交上游。无线贡献分支与整机维护分开保存。
 
-| 解决的问题 |
-|-----------|
-| 外接 HDMI 可输出 4K@60Hz |
-| 4K@60 黑闪（每几秒黑屏数秒）根治 |
-| 内屏 eDP 偶发不亮／点亮后失效 |
-| 开机亮度偏低 |
-| 熄屏后无法唤醒 |
-| 本机核显（80-EU）在此驱动下加速可用 |
+开发分支推送只执行配置校验。EFI 打包发布需手动触发，并标记为预发布；
+当前没有“完美 EFI”或图形完全稳定的发布承诺。
 
-排障用探针与实验项已从发布版配置中移除，不属于本仓库内容。
+## 来源与许可
 
-## 6. 使用说明
-
-1. 用磁盘工具（或 `diskutil mount diskXs1`）挂载 EFI 分区，把本仓库的 `EFI` 覆盖过去（机器自带的 Windows 引导目录可保留不动）。
-2. BIOS 设置：关闭 **Secure Boot**即可启动（其他项保持默认）。
-3. **三码替换（必做一次）**：`config.plist` 的 `PlatformInfo→Generic` 中 `SystemSerialNumber / MLB / SystemUUID / ROM` 均为空——请用 [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) 选择 `MacBookPro16,2` 生成后再填入；`ROM` 填 12 位随机 MAC，或从另一台真 Mac 抓取（iMessage 更容易通）。**请勿直接使用网络/他人已发布的 serial**。
-4. **安装核显运行组件（必装）**：第一次成功进入系统后，到 [WhateverXe Graphics Releases](https://github.com/b00t0x/WhateverXe-Graphics/releases) 下载最新 **pkg** 安装，然后重启——不装的话核显加速不完整。
-5. **安装内置麦克风组件（必装）**：进入 macOS 后，下载并安装 [`TGLDmic-HAL-startup-fix.pkg`](https://github.com/xiananliu/TGLDmic-HAL-Fix/releases/download/hal-startup-fix-1/TGLDmic-HAL-startup-fix.pkg)。修正版会等内核驱动就绪后再向 Core Audio 注册麦克风，针对开机后输入设备偶尔不出现的问题。如果之前装过原版，直接安装修正版即可替换。安装后重启，在“系统设置 → 声音 → 输入”选择 **Internal Microphone (TGLDmic)**。若 macOS 阻止打开安装包，请在“隐私与安全性”中允许，或在 Finder 中右键选择“打开”。
-
-## 7. 关联项目
-
-| 项目 | 说明 |
-|------|------|
-| [OpenCore](https://github.com/acidanthera/OpenCorePkg) | 引导程序（本仓库用 1.0.8 RELEASE） |
-| [Lilu](https://github.com/acidanthera/Lilu) | 内核补丁框架 |
-| [WhateverXe](https://github.com/b00t0x/WhateverXe) | 本机核显驱动的上游（BSD-3-Clause，本仓库 LICENSE 继承其许可体系） |
-| [WhateverXe Graphics](https://github.com/b00t0x/WhateverXe-Graphics) | 核显运行组件（首次进系统必装，见使用说明第 4 条） |
-| [wex-modified-edition](https://github.com/xiananliu/wex-modified-edition) | 本机使用的 WhateverXe 下游修改版（驱动改进细节见其 README） |
-| [VirtualSMC](https://github.com/acidanthera/VirtualSMC) | SMC 模拟（含电池/传感器插件） |
-| [AppleALC](https://github.com/acidanthera/AppleALC) | 声卡驱动 |
-| [SimpleHDA](https://github.com/laobamac/SimpleHDA) | macOS Tahoe 原版 AppleHDA 恢复插件（本 EFI 已配置） |
-| [TGLDmic](https://github.com/labrouss/TGLDmic) | Tiger Lake 数字麦克风驱动（BSD-3-Clause；版权归 labrouss 与 TGLDmic contributors；EFI 内含 kext，系统内需安装 HAL pkg） |
-| [AirportItlwm](https://github.com/OpenIntelWireless/itlwm) | Intel Wi-Fi 驱动 |
-| [IntelBluetoothFirmware](https://github.com/OpenIntelWireless/IntelBluetoothFirmware) | Intel 蓝牙驱动 |
-| [IntelMausi](https://github.com/acidanthera/IntelMausi) | Intel 有线网卡驱动 |
-| [VoodooI2C](https://github.com/VoodooI2C/VoodooI2C) / [VoodooRMI](https://github.com/1Revenger1/VoodooRMI) / [VoodooPS2Controller](https://github.com/acidanthera/VoodooPS2) | 触摸板 / 键盘输入栈 |
-| [USBToolBox](https://github.com/USBToolBox/kext) | USB 端口定制 |
-| [BrightnessKeys](https://github.com/acidanthera/BrightnessKeys) | 亮度快捷键 |
-| [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) | 三码生成工具（使用说明第 3 条用到） |
-
-本仓库许可见 [LICENSE](LICENSE)（BSD-3-Clause）；仓库内 OpenCore / kext 等二进制组件版权仍归各自上游。TGLDmic 内嵌 SOF 固件另适用 Intel 许可，见 [LICENCE.Intel](docs/TGLDmic/LICENCE.Intel)。
-
-## 8. 版本与更新
-
-EFI 目录每次更新会自动打 tag 并发布到 [Releases](https://github.com/xiananliu/g83-11gen-hackintosh-tahoe-efi/releases)（附打包好的 EFI zip 与校验文件），变更见各 release 说明与提交记录。
+本仓库继承 BSD-3-Clause 许可，见 [LICENSE](LICENSE)。组件版权及各自许可证保持原样，
+完整来源见 [Provenance](docs/Provenance.md)；固件等第三方资源适用其单独许可。

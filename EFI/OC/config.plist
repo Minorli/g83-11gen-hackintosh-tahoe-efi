@@ -1326,7 +1326,7 @@
 				<key>BundlePath</key>
 				<string>UTBMap.kext</string>
 				<key>Comment</key>
-				<string>USB port map for dynabook G83/HS</string>
+				<string>USB port map for dynabook G83 Tiger Lake (review required)</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
