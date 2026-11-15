@@ -41,6 +41,7 @@
 | 蓝牙 | ✅ | IntelBluetoothFirmware + BlueToolFixup |
 | 有线网卡 | ✅ | IntelMausi |
 | USB | ✅ | USBToolBox + UTBMap 定制端口表 |
+| TF（microSD）卡槽 | ✅ | Realtek RTS522A（`10ec:522a`），由 `RealtekCardReader.kext` 0.9.7 驱动。Sequoia 15.8.2 实测插卡后可识别并挂载。 |
 | 内屏（息屏）唤醒 | ✅ | 熄屏后可正常恢复 |
 | 睡眠唤醒 | ✅ | S0ixStandby 启用 Deep Idle。Sequoia 15.8.2 实测合盖睡眠、开盖恢复。 |
 | 内屏亮度 | ✅ | 已修复开局亮度偏低 |
