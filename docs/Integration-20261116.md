@@ -66,12 +66,20 @@ WindowServer abort，vikenzo196 又报告 Tahoe 26.7.3 / RPL 的 AirPlay 转换�
    本机存在 PNP0D80/PEPD 设备；CPUID / SSDT / kext 必须成组启用。
    另行确认保存工作、恢复入口、HDMI 断开及电池首测条件后，再做手动短睡眠；
    不先启用合盖或自动睡眠，不将硬件 SLP_S0=0 的 Deep Idle 称为完整低功耗 S0ix。
-4. **UU 闪屏候选**：WhateverXe-Next 的独立 TGLSyncFlip 本机已构建，11 个锚点匹配，CPU 4 组通过，
+4. **UU 闪屏候选（初审1.0.1，后续已修）**：WhateverXe-Next 的独立 TGLSyncFlip 初审构建时，11个锚点匹配，CPU 4组通过，
    本轮已修正旧10.6 ABI并增加真实SDK vtable回归测试；298个非Lilu导入均解析，9个Lilu导入由启动时Lilu提供。
    **未安装**。原模式2会持久改 plane CTL 缓存；native configurePlane 在
    `0x21CF` 参数相同可直接走 `0x22A0` 快路径，因此切回0不能无条件保证缓存/硬件立即恢复 async。
    在修正恢复语义、补回归测试并通过原生 trace 验证前，不开始 0/1/2 盲测。
    模式2原生轮询还可能超时，不能承诺“总是等真实锁存后才完成”。
+
+   后续1.0.2已修正缓存恢复、事务中途模式切换及部分route失败透传，8组逻辑、9组trace、
+   真实SDK ABI回归和21处锚点检查通过；本机已构建，但尚未安装、未做整机A/B。
+   实际WEX仍是原下游0.8.1 DEBUG（内部版本0.8.0），没有把仓库0.8.2同步到ESP。
+   11月16日新故障先报WindowServer/RCS，后报Windows App/CCS；用户反馈UU并发时卡死，
+   Windows App或Google RD单独似乎正常。报告归属不能当作起因，SyncFlip也未证明能修hang。
+   详见[显卡项目最新集成记录](https://github.com/Minorli/WhateverXe-Next/blob/main/docs/Integration-20261116.md)
+   和[候选验证](https://github.com/Minorli/WhateverXe-Next/blob/main/validation/syncflip-102-20261116.json)。
 
 ## 部署与回退入口
 
