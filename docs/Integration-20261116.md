@@ -75,7 +75,7 @@ WindowServer abort，vikenzo196 又报告 Tahoe 26.7.3 / RPL 的 AirPlay 转换�
 
    后续1.0.2已修正缓存恢复、事务中途模式切换及部分route失败透传，8组逻辑、9组trace、
    真实SDK ABI回归和21处锚点检查通过；维护者确认Shell回退后已安装到活动EFI，默认模式0，
-   待手动重启，未做整机A/B。安装后ocvalidate通过，原config备份为
+   已于11:54由维护者手动重启，完成启动核对及短时采集；未做长时A/B。安装后ocvalidate通过，原config备份为
    `OC/config.plist.pre-tglsync-20261116-102`；所有其它既有EFI文件保持不变。
    实际WEX仍是原下游0.8.1 DEBUG（内部版本0.8.0），没有把仓库0.8.2同步到ESP。
    11月16日新故障先报WindowServer/RCS，后报Windows App/CCS；用户反馈UU并发时卡死，
@@ -83,12 +83,27 @@ WindowServer abort，vikenzo196 又报告 Tahoe 26.7.3 / RPL 的 AirPlay 转换�
    详见[显卡项目最新集成记录](https://github.com/Minorli/WhateverXe-Next/blob/main/docs/Integration-20261116.md)
    和[候选验证](https://github.com/Minorli/WhateverXe-Next/blob/main/validation/syncflip-102-20261116.json)。
 
+   **成立〔整机启动 / 请求写入〕：**1.0.2已加载且routed/armed，默认模式0；
+   插件、WEX、framebuffer、accelerator的加载UUID与精确文件匹配，完整SHA未变。
+   桌面模式2/1短测后，UU 0→1→0三个约60秒采集窗口分别记录SURF前async/sync
+   2497/506、0/2850、2439/425，无缺口及未知CTL，证明转换与回退生效。
+   共享240秒健康窗口恢复调用、新增GPU报告均0；halt专用监控不可用。
+   **证据不足〔疗效〕：**参与者撤回第一轮不确定的闪烁计数并要求重新采集，
+   不能把这轮遥测当作症状消失或卡死修复。
+   后续逐段确认重采0→1→0：SURF前async/sync为2350/1300、0/3826、377/911；
+   用户观察为至少3次、没看到、不确定，回切后另有段外闪烁报告。
+   **部分成立〔短时整机 / 用户观察〕：**同步候选有初步信号，但回切段提交量明显降低，
+   仍缺同负载明确复现；300秒健康窗口无恢复调用或新增GPU报告。
+   最终保持模式0，未改持久默认值、未证明卡死修复。
+   完整后续数据见[启动与短测](https://github.com/Minorli/WhateverXe-Next/blob/main/validation/syncflip-postboot-20261116.json)。
+
 ## 部署与回退入口
 
 维护者已说明：没有独立启动验证的备用 EFI，仅有曾进入过的 UEFI Shell。
 原 SyncFlip 安装任务明确要求备用 EFI，因此安装门槛尚未满足；本轮没有反复询问相同事实。
 维护者随后明确批准 TF-only 安装及同分区 Shell 回退，授权范围只覆盖这一轮。
-该授权不替代 SyncFlip 的安装门槛；其他候选继续保留各自的恢复条件。任何重启时机仍由维护者决定。
+该次TF授权不替代SyncFlip的安装门槛；维护者随后另行接受Shell回退并明确批准SyncFlip，
+已按上节完成安装、手动启动及短时采集。其他候选继续保留各自恢复条件，重启时机仍由维护者决定。
 
 **成立〔落盘核验，不是启动验收〕**：活动 EFI 的唯一既有文件变化为 `OC/config.plist`，
 唯一语义变化是 `/Kernel/Add/26/Enabled` 将 RealtekCardReader 从 false 改为 true。
