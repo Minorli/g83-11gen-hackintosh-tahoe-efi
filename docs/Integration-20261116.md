@@ -74,7 +74,9 @@ WindowServer abort，vikenzo196 又报告 Tahoe 26.7.3 / RPL 的 AirPlay 转换�
    模式2原生轮询还可能超时，不能承诺“总是等真实锁存后才完成”。
 
    后续1.0.2已修正缓存恢复、事务中途模式切换及部分route失败透传，8组逻辑、9组trace、
-   真实SDK ABI回归和21处锚点检查通过；本机已构建，但尚未安装、未做整机A/B。
+   真实SDK ABI回归和21处锚点检查通过；维护者确认Shell回退后已安装到活动EFI，默认模式0，
+   待手动重启，未做整机A/B。安装后ocvalidate通过，原config备份为
+   `OC/config.plist.pre-tglsync-20261116-102`；所有其它既有EFI文件保持不变。
    实际WEX仍是原下游0.8.1 DEBUG（内部版本0.8.0），没有把仓库0.8.2同步到ESP。
    11月16日新故障先报WindowServer/RCS，后报Windows App/CCS；用户反馈UU并发时卡死，
    Windows App或Google RD单独似乎正常。报告归属不能当作起因，SyncFlip也未证明能修hang。
