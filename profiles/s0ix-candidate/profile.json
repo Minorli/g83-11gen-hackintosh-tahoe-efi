@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "status": "not deployed; disabled entries retained from G83 upstream 1.4.6",
+  "ACPI_Add": [
+    {
+      "Comment": "Deep Idle candidate - opt in with S0ixStandby and Ice Lake CPUID",
+      "Enabled": false,
+      "Path": "SSDT-DEEPIDLE.aml"
+    }
+  ],
+  "Kernel_Add": [
+    {
+      "Arch": "x86_64",
+      "BundlePath": "S0ixStandby.kext",
+      "Comment": "S0ixStandby 0.5.4 - sleep candidate not validated on this machine",
+      "Enabled": false,
+      "ExecutablePath": "Contents/MacOS/S0ixStandby",
+      "MaxKernel": "",
+      "MinKernel": "",
+      "PlistPath": "Contents/Info.plist"
+    }
+  ],
+  "activation_requires": "Review Ice Lake CPUID, ACPI, kext and sleep policy together; no automatic activation"
+}

@@ -46,23 +46,21 @@
 | 摄像头 | USB 设备已枚举；视频通话验收待完成 |
 | 电池 | 系统可报告状态；健康度读数需与固件或其他系统交叉核对 |
 | TF（microSD） | 本机 RTS522A（`10ec:522a`）已加载并绑定 RealtekCardReader 0.9.7；Tahoe 插卡、读写与弹出待验收 |
-| 系统睡眠 | 已收录 S0ixStandby 0.5.4 和 Deep Idle SSDT，默认禁用；本机尚未验证，HDMI 唤醒与接电 dark wake 有上游限制 |
+| 系统睡眠 | S0ixStandby 0.5.4 和 Deep Idle SSDT 保存在独立候选目录，未部署；HDMI 唤醒与接电 dark wake 有上游限制 |
 
 ## 2026-11-16 上游集成
 
-已合入 G83 上游 `ed57bf0`（EFI 1.4.6）的组件更新，维护线版本为 `1.4.6-minor.1`。
-模板使用下游 WhateverXe 0.8.2，保留 HDMI / CDCLK / 背光增强；旧 VA 回退、Metal 泄漏、
-eDP 训练等实验补丁已被下游移除。**仓库模板更新不等于本机已部署。**
+已合入 G83 上游 `ed57bf0`（EFI 1.4.6）的组件更新，维护线版本为 `1.4.6-minor.2`。
+根 `EFI/` 现已对齐本机活动EFI的脱敏快照：保留现用下游WhateverXe0.8.1 DEBUG、
+企业Wi-Fi修订、TGLDisplayProbe1.0.1和TGLSyncFlip1.0.2，以及事务同步模式1启动参数。
+下一次启动默认值仍待核验；本轮只同步仓库，没有写活动EFI或重启。
+指纹、配置语义与校验见[当前EFI](docs/Current-EFI.md)。
 
-S0ixStandby 与 SSDT 已收录，仍保持 `Enabled=false`，CPUID 暂保留 Coffee Lake 兼容值；
-睡眠候选需成组切换 Ice Lake CPUID、SSDT 与 kext，不能只启用其中一项。
-本机继续使用既有 WEX / Metal，并保留 VA 隔离。新的 Graphics 0.4.4 包没有新的 Metal 或
-framebuffer 代码，且存在视频合成转换回归报告；不通过直接运行安装包来覆盖当前工作系统。
-完整组件比对、部署分组和已知限制见[本轮集成记录](docs/Integration-20261116.md)。
-
-本机已单独固化TGLSyncFlip 1.0.2事务同步模式1。相同SHA插件、配置片段和回退见
-[本机呈现配置](profiles/tglsyncflip-mode1/README.md)；公开模板仍为WEX 0.8.2，
-本机受测组合仍用原下游0.8.1，因此未将两套配置的验证结论混用。
+此前0.8.2模板保留在Git历史，仍未部署。
+S0ixStandby与SSDT移到[独立睡眠候选](profiles/s0ix-candidate/README.md)，保持未部署；
+CPUID保留本机兼容值，后续需成组评审。VA仍隔离，Graphics0.4.4未安装。
+完整组件比对、历史集成过程和已知限制见[本轮集成记录](docs/Integration-20261116.md)。
+相同SHA插件、配置片段和回退也保存在[本机呈现配置](profiles/tglsyncflip-mode1/README.md)。
 
 ## 使用与维护
 
@@ -83,7 +81,7 @@ framebuffer 代码，且存在视频合成转换回归报告；不通过直接�
 ## 迭代方向
 
 优先解决图形内存增长、远程呈现闪屏和 BCS 卡死，再完成 USB 实机映射、
-固定负载下的功耗对照、音频 / 蓝牙与睡眠验收。完整巡检见[维护路线](docs/Maintenance.md)。
+固定负载下的功耗对照、音频 / 蓝牙与睡眠验收。长期上游跟踪与部署流程见[维护路线](docs/Maintenance.md)。
 
 独立显卡项目为 [WhateverXe-Next](https://github.com/Minorli/WhateverXe-Next)，
 集中维护可审查源码、诊断工具与脱敏验证材料；本仓库负责 G83 的整机集成。

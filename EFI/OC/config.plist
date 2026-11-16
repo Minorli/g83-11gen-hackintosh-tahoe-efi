@@ -24,7 +24,7 @@
 			</dict>
 			<dict>
 				<key>Comment</key>
-				<string>Disabled: alternate PNLF, UID=0x13</string>
+				<string>: SSDT-PNLF (UID=0x13)</string>
 				<key>Enabled</key>
 				<false/>
 				<key>Path</key>
@@ -32,7 +32,7 @@
 			</dict>
 			<dict>
 				<key>Comment</key>
-				<string>Add I2C0 _ADR required by VoodooI2C</string>
+				<string>SSDT-I2C0ADR.aml  I2C0 _ADR  VoodooI2C</string>
 				<key>Enabled</key>
 				<true/>
 				<key>Path</key>
@@ -40,7 +40,7 @@
 			</dict>
 			<dict>
 				<key>Comment</key>
-				<string>Internal backlight PNLF APP0002, UID=0x13</string>
+				<string>PNLF APP0002 UID=0x13 (TGL)</string>
 				<key>Enabled</key>
 				<true/>
 				<key>Path</key>
@@ -54,14 +54,6 @@
 				<key>Path</key>
 				<string>SSDT-G83-Brightness.aml</string>
 			</dict>
-			<dict>
-				<key>Comment</key>
-				<string>Deep Idle candidate - opt in with S0ixStandby and Ice Lake CPUID</string>
-				<key>Enabled</key>
-				<false/>
-				<key>Path</key>
-				<string>SSDT-DEEPIDLE.aml</string>
-			</dict>
 		</array>
 		<key>Delete</key>
 		<array/>
@@ -73,7 +65,7 @@
 				<key>BaseSkip</key>
 				<integer>0</integer>
 				<key>Comment</key>
-				<string>OSYS: Windows 2013 -&gt; Darwin; expose TPD0 I2C resources</string>
+				<string>OSYS: Windows 2013 -&gt; Darwin,  TPD0 _CRS  I2C  (OSYS&lt;0x07DC )</string>
 				<key>Count</key>
 				<integer>0</integer>
 				<key>Enabled</key>
@@ -452,8 +444,10 @@
 			<dict>
 				<key>Base</key>
 				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
 				<key>Comment</key>
-				<string>I2CN=SDS0 -&gt; I2CN=1; expose TPD0 ACPI device</string>
+				<string>I2CN=SDS0 -&gt; I2CN=1, TPD0 _STA ( ACPI )</string>
 				<key>Count</key>
 				<integer>0</integer>
 				<key>Enabled</key>
@@ -484,12 +478,14 @@
 				<key>TableSignature</key>
 				<data>
 				</data>
-				<key>BaseSkip</key>
-				<integer>0</integer>
 			</dict>
 			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
 				<key>Comment</key>
-				<string>TPD0 _STA -&gt; Return(0x0F); bypass TPDT/I2CN condition</string>
+				<string>TPD0 _STA -&gt; Return(0x0F),  ACPI ( TPDT/I2CN )</string>
 				<key>Count</key>
 				<integer>0</integer>
 				<key>Enabled</key>
@@ -500,6 +496,9 @@
 				</data>
 				<key>Limit</key>
 				<integer>0</integer>
+				<key>Mask</key>
+				<data>
+				</data>
 				<key>OemTableId</key>
 				<data>
 				</data>
@@ -515,13 +514,6 @@
 				<key>TableLength</key>
 				<integer>0</integer>
 				<key>TableSignature</key>
-				<data>
-				</data>
-				<key>Base</key>
-				<string></string>
-				<key>BaseSkip</key>
-				<integer>0</integer>
-				<key>Mask</key>
 				<data>
 				</data>
 			</dict>
@@ -846,6 +838,24 @@
 				<key>Arch</key>
 				<string>x86_64</string>
 				<key>BundlePath</key>
+				<string>TGLSyncFlip.kext</string>
+				<key>Comment</key>
+				<string>TGLSyncFlip 1.0.2 - default pass-through; explicit experiment</string>
+				<key>Enabled</key>
+				<true/>
+				<key>ExecutablePath</key>
+				<string>Contents/MacOS/TGLSyncFlip</string>
+				<key>MaxKernel</key>
+				<string>25.99.99</string>
+				<key>MinKernel</key>
+				<string>25.0.0</string>
+				<key>PlistPath</key>
+				<string>Contents/Info.plist</string>
+			</dict>
+			<dict>
+				<key>Arch</key>
+				<string>x86_64</string>
+				<key>BundlePath</key>
 				<string>AMFIPass.kext</string>
 				<key>Comment</key>
 				<string></string>
@@ -962,7 +972,7 @@
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/SimpleHDA</string>
 				<key>MaxKernel</key>
-				<string></string>
+				<string>25.99.99</string>
 				<key>MinKernel</key>
 				<string>25.0.0</string>
 				<key>PlistPath</key>
@@ -1010,7 +1020,7 @@
 				<key>BundlePath</key>
 				<string>VoodooInput.kext</string>
 				<key>Comment</key>
-				<string>Single VoodooInput provider for multitouch</string>
+				<string>I2C</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -1028,7 +1038,7 @@
 				<key>BundlePath</key>
 				<string>VoodooSMBus.kext</string>
 				<key>Comment</key>
-				<string>SMBus controller</string>
+				<string>SMBus  G83</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -1046,7 +1056,7 @@
 				<key>BundlePath</key>
 				<string>VoodooRMI.kext</string>
 				<key>Comment</key>
-				<string>Synaptics RMI support</string>
+				<string>Synaptics SMBus  G83</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -1064,7 +1074,7 @@
 				<key>BundlePath</key>
 				<string>VoodooRMI.kext/Contents/PlugIns/VoodooInput.kext</string>
 				<key>Comment</key>
-				<string>Disabled duplicate VoodooInput provider</string>
+				<string>G83HSI2CRMI</string>
 				<key>Enabled</key>
 				<false/>
 				<key>ExecutablePath</key>
@@ -1082,7 +1092,7 @@
 				<key>BundlePath</key>
 				<string>VoodooRMI.kext/Contents/PlugIns/RMII2C.kext</string>
 				<key>Comment</key>
-				<string>Disabled RMI I2C transport</string>
+				<string>G83  SMBus  I2C</string>
 				<key>Enabled</key>
 				<false/>
 				<key>ExecutablePath</key>
@@ -1100,7 +1110,7 @@
 				<key>BundlePath</key>
 				<string>VoodooRMI.kext/Contents/PlugIns/RMISMBus.kext</string>
 				<key>Comment</key>
-				<string>RMI SMBus transport</string>
+				<string>SMBus  G83</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -1118,7 +1128,7 @@
 				<key>BundlePath</key>
 				<string>VoodooGPIO.kext</string>
 				<key>Comment</key>
-				<string>GPIO interrupt support</string>
+				<string>GPIO dependency before VoodooI2C</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -1136,7 +1146,7 @@
 				<key>BundlePath</key>
 				<string>VoodooI2CServices.kext</string>
 				<key>Comment</key>
-				<string>I2C services dependency</string>
+				<string>I2C services dependency before VoodooI2C</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -1154,7 +1164,7 @@
 				<key>BundlePath</key>
 				<string>VoodooI2C.kext</string>
 				<key>Comment</key>
-				<string>I2C controller for TOSB1001 touchpad</string>
+				<string>I2C controller after GPIO and services</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -1172,7 +1182,7 @@
 				<key>BundlePath</key>
 				<string>VoodooI2C.kext/Contents/PlugIns/VoodooInput.kext</string>
 				<key>Comment</key>
-				<string>Disabled duplicate VoodooInput provider</string>
+				<string>RMI</string>
 				<key>Enabled</key>
 				<false/>
 				<key>ExecutablePath</key>
@@ -1190,7 +1200,7 @@
 				<key>BundlePath</key>
 				<string>VoodooI2CHID.kext</string>
 				<key>Comment</key>
-				<string>I2C HID support for TOSB1001</string>
+				<string>I2C HID  TOSB1001</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -1334,7 +1344,7 @@
 				<key>BundlePath</key>
 				<string>UTBMap.kext</string>
 				<key>Comment</key>
-				<string>USB port map for dynabook G83 Tiger Lake (review required)</string>
+				<string>USB port map for dynabook G83/HS</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
@@ -1358,7 +1368,7 @@
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/AirportItlwm</string>
 				<key>MaxKernel</key>
-				<string></string>
+				<string>25.99.99</string>
 				<key>MinKernel</key>
 				<string>25.0.0</string>
 				<key>PlistPath</key>
@@ -1370,15 +1380,15 @@
 				<key>BundlePath</key>
 				<string>AirportItlwm-Sequoia.kext</string>
 				<key>Comment</key>
-				<string>AirportItlwm 2.4.0 Sequoia variant; Darwin 24.2-24.99</string>
+				<string>AirportItlwm v2.4.0 Sequoia variant, macOS15/Darwin24  (laobamac v2.4.0-alpha RELEASE)</string>
 				<key>Enabled</key>
 				<true/>
 				<key>ExecutablePath</key>
 				<string>Contents/MacOS/AirportItlwm</string>
 				<key>MaxKernel</key>
-				<string>24.9.9</string>
+				<string>24.99.99</string>
 				<key>MinKernel</key>
-				<string></string>
+				<string>24.2.0</string>
 				<key>PlistPath</key>
 				<string>Contents/Info.plist</string>
 			</dict>
@@ -1458,17 +1468,17 @@
 				<key>Arch</key>
 				<string>x86_64</string>
 				<key>BundlePath</key>
-				<string>S0ixStandby.kext</string>
+				<string>TGLDisplayProbe.kext</string>
 				<key>Comment</key>
-				<string>S0ixStandby 0.5.4 - sleep candidate not validated on this machine</string>
+				<string>Native RAM counter observer 1.0.1; MMIO disabled</string>
 				<key>Enabled</key>
-				<false/>
+				<true/>
 				<key>ExecutablePath</key>
-				<string>Contents/MacOS/S0ixStandby</string>
-				<key>MaxKernel</key>
-				<string></string>
+				<string>Contents/MacOS/TGLDisplayProbe</string>
 				<key>MinKernel</key>
-				<string></string>
+				<string>25.0.0</string>
+				<key>MaxKernel</key>
+				<string>25.99.99</string>
 				<key>PlistPath</key>
 				<string>Contents/Info.plist</string>
 			</dict>
@@ -1731,7 +1741,30 @@
 			<false/>
 		</dict>
 		<key>Tools</key>
-		<array/>
+		<array>
+			<dict>
+				<key>Arguments</key>
+				<string></string>
+				<key>Auxiliary</key>
+				<true/>
+				<key>Comment</key>
+				<string>Official OpenCore 1.0.8 shell for local EFI recovery</string>
+				<key>Enabled</key>
+				<true/>
+				<key>Flavour</key>
+				<string>OpenShell:UEFIShell:Shell</string>
+				<key>FullNvramAccess</key>
+				<false/>
+				<key>Name</key>
+				<string>UEFI Shell (Recovery)</string>
+				<key>Path</key>
+				<string>OpenShell.efi</string>
+				<key>RealPath</key>
+				<false/>
+				<key>TextMode</key>
+				<false/>
+			</dict>
+		</array>
 	</dict>
 	<key>NVRAM</key>
 	<dict>
@@ -1767,7 +1800,7 @@
 				AAAAAAAAAAAAAAAAAAA=
 				</data>
 				<key>boot-args</key>
-				<string>-allow3d -disablegfxfirmware -igfxdvmt -vi2c-force-polling alcid=11 -wex-cdclk-sanitize -wex-blfix -wex-hdmi-clock600 -wex-hdmi-scdc-write -tgldmic</string>
+				<string>-allow3d -disablegfxfirmware -igfxdvmt -vi2c-force-polling alcid=11 alcdelay=1000 TSC_sync_margin=0 -wex-cdclk-sanitize -wex-blfix -wex-dcoff -wex-hdmi-clock600 -wex-hdmi-scdc-write -tgldmic -wex-tgl-va-fallback -wex-tgl-va-sites=1 -wex-tgl-fix-memory-leak -wex-edp-fix-training tgldmicpm=0 ig=0x20 -tglsync tglsyncmode=1</string>
 				<key>csr-active-config</key>
 				<data>
 				AwgAAA==

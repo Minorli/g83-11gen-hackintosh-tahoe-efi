@@ -9,17 +9,18 @@
 | OpenCore | [acidanthera/OpenCorePkg](https://github.com/acidanthera/OpenCorePkg)，1.0.8 RELEASE |
 | Lilu / VirtualSMC / AppleALC | [Acidanthera](https://github.com/acidanthera)，各组件保留自身许可 |
 | WhateverXe | [b00t0x/WhateverXe](https://github.com/b00t0x/WhateverXe)，BSD-3-Clause |
-| 当前 WEX 下游二进制 | [wex-modified-edition](https://github.com/xiananliu/wex-modified-edition)，模板为 release 0.8.2 RELEASE，内部版本 0.8.2；本机活动 EFI 仍为原 0.8.1 DEBUG（内部 0.8.0）；对应下游修改源码未公开 |
+| 当前 WEX 下游二进制 | [wex-modified-edition](https://github.com/xiananliu/wex-modified-edition)，根EFI与本机均为0.8.1 DEBUG（内部0.8.0），SHA `df96a2ca…f4ed3`；0.8.2候选保留于Git历史、未部署；对应下游修改源码未公开 |
 | 图形运行组件 | [WhateverXe-Graphics](https://github.com/b00t0x/WhateverXe-Graphics)，本机为 v0.4.3 Metal，v0.4.4 安装包已解包比对但未安装；系统安装状态不包含在本 EFI 仓库中 |
 | 独立显卡研究 | [WhateverXe-Next](https://github.com/Minorli/WhateverXe-Next)，源码审查、BCS 诊断与 POSH 生命周期研究；其内核恢复候选未部署，已部署独立插件单列如下 |
-| 本机事务同步插件 | `profiles/tglsyncflip-mode1`包含TGLSyncFlip 1.0.2同SHA二进制，代码固定于WhateverXe-Next `24dcd325`，BSD-3-Clause许可随附；本机已加载，原生恢复候选未部署 |
+| 本机事务同步插件 | 根EFI与`profiles/tglsyncflip-mode1`包含TGLSyncFlip1.0.2同SHA二进制，代码固定于WhateverXe-Next `24dcd325`，BSD-3-Clause许可随附；本机已加载，原生恢复候选未部署 |
+| 原生计数探针 | 根EFI包含TGLDisplayProbe1.0.1，源码来自WhateverXe-Next `45eb1cb3`，SHA `192e72cf…ecf63`；只读RAM版，BSD-3-Clause许可与说明见[TGLDisplayProbe](TGLDisplayProbe/README.md) |
 | AirportItlwm | [OpenIntelWireless/itlwm](https://github.com/OpenIntelWireless/itlwm)；本地认证修订、源码和许可证见 [AirportItlwm](AirportItlwm/README.md) |
 | Intel 蓝牙 / 有线网络 | [IntelBluetoothFirmware](https://github.com/OpenIntelWireless/IntelBluetoothFirmware) / [IntelMausi](https://github.com/acidanthera/IntelMausi) |
 | Tahoe 音频 | [SimpleHDA](https://github.com/laobamac/SimpleHDA) |
 | 数字麦克风 | [TGLDmic](https://github.com/labrouss/TGLDmic)，BSD-3-Clause；[HAL 启动时序集成](https://github.com/xiananliu/TGLDmic-HAL-Fix)；固件见 [LICENCE.Intel](TGLDmic/LICENCE.Intel) |
 | 输入 | [VoodooI2C](https://github.com/VoodooI2C/VoodooI2C)、[VoodooRMI](https://github.com/1Revenger1/VoodooRMI)、[VoodooPS2](https://github.com/acidanthera/VoodooPS2) |
 | USB | [USBToolBox](https://github.com/USBToolBox/kext)，UTBMap 为继承的机器映射，需按本机复核 |
-| Deep Idle 睡眠候选 | [labrouss/S0ixStandby](https://github.com/labrouss/S0ixStandby)，v0.5.4 / `c52f172b`；BSD-3-Clause，原许可随 kext 保留；本维护线默认禁用，未继承其他机器的睡眠验收 |
+| Deep Idle 睡眠候选 | [labrouss/S0ixStandby](https://github.com/labrouss/S0ixStandby)，v0.5.4 / `c52f172b`；BSD-3-Clause，原许可随kext保留于`profiles/s0ix-candidate`，未部署；未继承其他机器的睡眠验收 |
 | TF 读卡器 | [0xFireWolf/RealtekCardReader](https://github.com/0xFireWolf/RealtekCardReader)，0.9.7；沿用 G83 上游所带文件，启用不等于本机功能已测 |
 | 亮度快捷键 | [BrightnessKeys](https://github.com/acidanthera/BrightnessKeys) |
 | SMBIOS 身份工具 | [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS)，自行生成唯一身份 |
