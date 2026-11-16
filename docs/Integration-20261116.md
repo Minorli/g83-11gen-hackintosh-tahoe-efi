@@ -2,8 +2,8 @@
 
 本轮目标是吸收可追溯更新，准备本机候选；不是给未启动的配置补写“稳定”结论。
 主机为 i7-1165G7 / Iris Xe 96EU / 24GB DDR4 / Tahoe 26.7.3（25G342）。
-审查与候选暂存阶段没有修改活动系统。随后经维护者明确批准，仅将 TF-only 配置写入活动 EFI，
-待维护者手动重启验证；系统 Library、VA 隔离及镜像布局均未改变。
+审查与候选暂存阶段没有修改活动系统。随后经维护者明确批准，将 TF-only 配置写入活动 EFI；
+后续手动启动已确认驱动加载与设备绑定，插卡功能仍待验收。系统 Library、VA 隔离及镜像布局均未改变。
 
 ## 核对结论
 
@@ -12,7 +12,7 @@
 | WhateverXe 官方更新 | **成立〔Git 源码〕**：最新 release 为 0.8.2。已集成源码基线 `4512191b` 至当前官方 main `2bad7171` 仅变更 CHANGELOG.md，没有遗漏新内核修复 | 保留本地修复，合并最新说明；不把文档更新称作新代码修复 |
 | G83 上游 1.4.6 | **成立〔Git 差异〕**：合入 `ed57bf0`，保留本维护线企业认证、I2C 顺序、配置校验及私有身份隔离 | 模板版本 `1.4.6-minor.1`；发布仍需手动触发且为 prerelease |
 | 移除私有 GPU 补丁 | **部分成立〔下游 release / 二进制〕**：0.8.2 移除旧 VA、MTL、eDP 训练、VBT 实验与诊断；仍保留 HDMI clock600/SCDC、CDCLK、背光增强 | 不是纯上游 WEX；不以“移除补丁”推导闪屏已修复 |
-| TF 读卡器 | **成立〔本机 PCI / 静态依赖 / 落盘核验〕**：RTS522A `10ec:522a` 匹配 0.9.7；kmutil 所列符号均可解析 | 经批准已写入 TF-only 配置，只启用已有 RealtekCardReader；Friend 保持禁用。重启加载与插卡仍待本机验收 |
+| TF 读卡器 | **成立〔本机 PCI / 静态依赖 / 落盘 / 启动核验〕**：RTS522A `10ec:522a` 匹配 0.9.7；本次启动已加载 `science.firewolf.rtsx` 0.9.7 并绑定 RealtekRTS522AController | TF-only 配置已部署；Friend 保持禁用。存储驱动层已建立，插卡、挂载、读写与弹出仍待本机验收 |
 | 睡眠修复可直接照搬 | **不成立〔来源范围 / 源码〕**：上游 G83 验证是 Sequoia 15.8.2；S0ix 项目还报告 HDMI 带线唤醒冻结与接电 dark-wake 再睡眠冻结 | S0ixStandby、SSDT 收录但默认关闭，CPUID 保留既有值；不自动改 pmset |
 | Graphics 0.4.4 能修本机 UU 闪屏 | **证据不足〔静态比对〕**：其 Metal 与 framebuffer 和现用文件完整 SHA 相同；发行说明的新增项是 H.264 编码回归修复 | 不把更新包当闪屏修复；单独准备无 VA 的图形更新候选 |
 | Claude 审查 | **成立〔材料核验〕**：显示审查 §7.6 支持继续检验 async 事务，并提供独立 SyncFlip 候选 | 保留现用 WEX 进行同启动对照，先解决候选的回退语义问题 |
@@ -94,10 +94,27 @@ WindowServer abort，vikenzo196 又报告 Tahoe 26.7.3 / RPL 的 AirPlay 转换�
    用户观察为至少3次、没看到、不确定，回切后另有段外闪烁报告。
    **部分成立〔短时整机 / 用户观察〕：**同步候选有初步信号，但回切段提交量明显降低，
    仍缺同负载明确复现；300秒健康窗口无恢复调用或新增GPU报告。
-   最终保持模式0，未改持久默认值、未证明卡死修复。
+   该短测结束时保持模式0，未改持久默认值、未证明卡死修复。
    完整后续数据见[启动与短测](https://github.com/Minorli/WhateverXe-Next/blob/main/validation/syncflip-postboot-20261116.json)。
 
 ## 部署与回退入口
+
+### 后续核对：1.4.6 覆盖范围与 TF 启动
+
+2026-11-16再次fetch上游并查询最新release：仍为1.4.6，目标`ed57bf0`，
+发布时间2026-11-15。`HEAD..upstream/main`提交数为0，表示上游历史已完整合入；
+不表示把上游每项配置都默认开启，也不表示活动EFI已整体替换。
+
+**成立〔整机启动 / 设备绑定〕：**当前`kmutil showloaded`中为
+`science.firewolf.rtsx (0.9.7)`；PCI `10ec:522a`下挂接
+`RealtekRTS522AController → RealtekPCISDXCSlot → IOSDHostDriver → IOSDBlockStorageDevice`。
+这将TF状态从“待加载核验”推进到“已加载并绑定”，不能替代插卡读写与弹出验收。
+
+S0ixStandby与Deep Idle SSDT仍在模板中禁用；睡眠CPUID及本机pmset未改变。
+仓库WEX为0.8.2，活动系统仍为原下游0.8.1 DEBUG（内部版本0.8.0）。
+SyncFlip在12:31后持续保留运行时模式1，重启默认0；维护者后续反馈暂未见问题，
+正在进行另一轮日常使用采集。具体观测窗口与遥测以显卡项目记录为准，
+不把正在进行的观察写成长期稳定或RCS/CCS卡死已修复。
 
 维护者已说明：没有独立启动验证的备用 EFI，仅有曾进入过的 UEFI Shell。
 原 SyncFlip 安装任务明确要求备用 EFI，因此安装门槛尚未满足；本轮没有反复询问相同事实。
@@ -109,7 +126,8 @@ WindowServer abort，vikenzo196 又报告 Tahoe 26.7.3 / RPL 的 AirPlay 转换�
 唯一语义变化是 `/Kernel/Add/26/Enabled` 将 RealtekCardReader 从 false 改为 true。
 新增的 `OC/config.plist.pre-tf-20261116` 与安装前 baseline 逐字节相同；临时配置已移除。
 全部其他 EFI 文件、WEX、企业无线、身份、CPUID、ACPI、USB 与 boot-args 均保持原样。
-安装后活动配置通过 ocvalidate 1.0.8；尚未重启，不能声称读卡器已加载或 TF 问题已修复。
+安装后活动配置通过 ocvalidate 1.0.8；当时尚未重启。后续已确认读卡器加载与绑定，
+如上节所述，尚不能声称插卡功能已完成验收。
 
 若本轮不能启动，从已使用过的 OpenCore `UEFI Shell (Recovery)` 进入，执行 `map -r`，
 逐个 `fsN:` 查找 `\EFI\OC\config.plist.pre-tf-20261116`，不要假定 `fs0:`。

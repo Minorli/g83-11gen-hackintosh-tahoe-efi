@@ -44,7 +44,7 @@
 | 亮度与显示布局 | 保留当前工作配置及有意设置的双屏镜像；未声称外接 4K / 所有模式都已验收 |
 | 摄像头 | USB 设备已枚举；视频通话验收待完成 |
 | 电池 | 系统可报告状态；健康度读数需与固件或其他系统交叉核对 |
-| TF（microSD） | 已核对本机 RTS522A（`10ec:522a`），模板启用 RealtekCardReader 0.9.7；Tahoe 实机插卡待验收 |
+| TF（microSD） | 本机 RTS522A（`10ec:522a`）已加载并绑定 RealtekCardReader 0.9.7；Tahoe 插卡、读写与弹出待验收 |
 | 系统睡眠 | 已收录 S0ixStandby 0.5.4 和 Deep Idle SSDT，默认禁用；本机尚未验证，HDMI 唤醒与接电 dark wake 有上游限制 |
 
 ## 2026-11-16 上游集成
