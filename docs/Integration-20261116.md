@@ -2,7 +2,8 @@
 
 本轮目标是吸收可追溯更新，准备本机候选；不是给未启动的配置补写“稳定”结论。
 主机为 i7-1165G7 / Iris Xe 96EU / 24GB DDR4 / Tahoe 26.7.3（25G342）。
-截至本轮结束，活动 EFI、系统 Library、VA 隔离及镜像布局均未改变。
+审查与候选暂存阶段没有修改活动系统。随后经维护者明确批准，仅将 TF-only 配置写入活动 EFI，
+待维护者手动重启验证；系统 Library、VA 隔离及镜像布局均未改变。
 
 ## 核对结论
 
@@ -11,7 +12,7 @@
 | WhateverXe 官方更新 | **成立〔Git 源码〕**：最新 release 为 0.8.2。已集成源码基线 `4512191b` 至当前官方 main `2bad7171` 仅变更 CHANGELOG.md，没有遗漏新内核修复 | 保留本地修复，合并最新说明；不把文档更新称作新代码修复 |
 | G83 上游 1.4.6 | **成立〔Git 差异〕**：合入 `ed57bf0`，保留本维护线企业认证、I2C 顺序、配置校验及私有身份隔离 | 模板版本 `1.4.6-minor.1`；发布仍需手动触发且为 prerelease |
 | 移除私有 GPU 补丁 | **部分成立〔下游 release / 二进制〕**：0.8.2 移除旧 VA、MTL、eDP 训练、VBT 实验与诊断；仍保留 HDMI clock600/SCDC、CDCLK、背光增强 | 不是纯上游 WEX；不以“移除补丁”推导闪屏已修复 |
-| TF 读卡器 | **成立〔本机 PCI / 静态依赖〕**：RTS522A `10ec:522a` 匹配 0.9.7；kmutil 所列符号均可解析 | 准备 TF-only 配置，只启用已有 RealtekCardReader；Friend 保持禁用。插卡仍待本机验收 |
+| TF 读卡器 | **成立〔本机 PCI / 静态依赖 / 落盘核验〕**：RTS522A `10ec:522a` 匹配 0.9.7；kmutil 所列符号均可解析 | 经批准已写入 TF-only 配置，只启用已有 RealtekCardReader；Friend 保持禁用。重启加载与插卡仍待本机验收 |
 | 睡眠修复可直接照搬 | **不成立〔来源范围 / 源码〕**：上游 G83 验证是 Sequoia 15.8.2；S0ix 项目还报告 HDMI 带线唤醒冻结与接电 dark-wake 再睡眠冻结 | S0ixStandby、SSDT 收录但默认关闭，CPUID 保留既有值；不自动改 pmset |
 | Graphics 0.4.4 能修本机 UU 闪屏 | **证据不足〔静态比对〕**：其 Metal 与 framebuffer 和现用文件完整 SHA 相同；发行说明的新增项是 H.264 编码回归修复 | 不把更新包当闪屏修复；单独准备无 VA 的图形更新候选 |
 | Claude 审查 | **成立〔材料核验〕**：显示审查 §7.6 支持继续检验 async 事务，并提供独立 SyncFlip 候选 | 保留现用 WEX 进行同启动对照，先解决候选的回退语义问题 |
@@ -76,11 +77,24 @@ WindowServer abort，vikenzo196 又报告 Tahoe 26.7.3 / RPL 的 AirPlay 转换�
 
 维护者已说明：没有独立启动验证的备用 EFI，仅有曾进入过的 UEFI Shell。
 原 SyncFlip 安装任务明确要求备用 EFI，因此安装门槛尚未满足；本轮没有反复询问相同事实。
-已完成可审查候选，下一步需维护者准备并实际启动备用 EFI，或明确修订为接受经过核对的 Shell
-同分区恢复方案（只适用于 EFI 级更改），再确认具体安装轮次。任何重启时机仍由维护者决定。
+维护者随后明确批准 TF-only 安装及同分区 Shell 回退，授权范围只覆盖这一轮。
+该授权不替代 SyncFlip 的安装门槛；其他候选继续保留各自的恢复条件。任何重启时机仍由维护者决定。
 
-TF-only 的 Shell 恢复可用预先放到同分区的 baseline config，找到实际 fsN 后执行复制恢复。
-本轮未向活动 EFI 放置这些新文件，不能宣称该候选已有盘上回退入口。
+**成立〔落盘核验，不是启动验收〕**：活动 EFI 的唯一既有文件变化为 `OC/config.plist`，
+唯一语义变化是 `/Kernel/Add/26/Enabled` 将 RealtekCardReader 从 false 改为 true。
+新增的 `OC/config.plist.pre-tf-20261116` 与安装前 baseline 逐字节相同；临时配置已移除。
+全部其他 EFI 文件、WEX、企业无线、身份、CPUID、ACPI、USB 与 boot-args 均保持原样。
+安装后活动配置通过 ocvalidate 1.0.8；尚未重启，不能声称读卡器已加载或 TF 问题已修复。
+
+若本轮不能启动，从已使用过的 OpenCore `UEFI Shell (Recovery)` 进入，执行 `map -r`，
+逐个 `fsN:` 查找 `\EFI\OC\config.plist.pre-tf-20261116`，不要假定 `fs0:`。
+在找到该文件的文件系统执行：
+
+```text
+cp \EFI\OC\config.plist.pre-tf-20261116 \EFI\OC\config.plist
+```
+
+确认复制成功后 `exit`，由维护者手动重新启动，不需 Reset NVRAM。
 Graphics Library / KC 更改与 EFI-only 回退分开处理，不能删除 boot-arg 就算恢复所有组件。
 
 ## 来源
