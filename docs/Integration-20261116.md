@@ -112,9 +112,32 @@ WindowServer abort，vikenzo196 又报告 Tahoe 26.7.3 / RPL 的 AirPlay 转换�
 
 S0ixStandby与Deep Idle SSDT仍在模板中禁用；睡眠CPUID及本机pmset未改变。
 仓库WEX为0.8.2，活动系统仍为原下游0.8.1 DEBUG（内部版本0.8.0）。
-SyncFlip在12:31后持续保留运行时模式1，重启默认0；维护者后续反馈暂未见问题，
-正在进行另一轮日常使用采集。具体观测窗口与遥测以显卡项目记录为准，
-不把正在进行的观察写成长期稳定或RCS/CCS卡死已修复。
+SyncFlip在12:31后持续保留运行时模式1，该阶段重启默认0；后续观察已按维护者要求停止，
+并于14:20将模式1固化到活动EFI，见下节。具体窗口与遥测以显卡项目记录为准，
+不把本机呈现改善写成长期稳定或RCS/CCS卡死已修复。
+
+### 14:20 本机事务同步固化
+
+**成立〔本机用户观察〕：**维护者认为同步后原UU闪屏已消失，明确要求停止观察并固化，
+供外部审查。13:57:01–14:18:16的健康窗口为1274.7秒，128份保存快照无恢复调用／返回或
+新增GPU报告；全窗准确症状计数未知。RCS／CCS／BCS状态事件有活动，不是逐客户端完成stamp。
+平均CPU空闲86.11%，CPU die 41–51℃；负载未控制，不能归因为同步降温或性能提升。
+WindowServer footprint 424–686MiB波动，OLS +5.204MiB/min，不足以证明无泄漏。
+
+**成立〔磁盘核验〕：**活动EFI唯一语义变化为追加`tglsyncmode=1`，原`-tglsync`及其它参数
+全部保留；仅config一个既有文件改变，备份逐字节匹配，ocvalidate 1.0.8通过。
+当前运行时1，下次启动请求1，**实际开机默认值未重启验收**。没有自动重启、改镜像、
+升级WEX／Graphics或恢复VA。私人EFI只在本机保存，公开同SHA插件与配置片段见
+[本机呈现配置](../profiles/tglsyncflip-mode1/README.md)。该片段未混入WEX 0.8.2模板。
+
+**证据不足〔RCS／CCS修复〕：**同步呈现没有修改恢复逻辑、POSH或GPU完成stamp；
+没有受控并发故障复现，Windows App进程也在，不能把这一短窗无错误当成卡死修复。
+审查以[固化聚合](https://github.com/Minorli/WhateverXe-Next/blob/a5062dd/validation/syncflip-persist-mode1-20261116.json)
+和[REVIEW](https://github.com/Minorli/WhateverXe-Next/blob/a5062dd/docs/REVIEW.md)为准。
+
+临时回退为`tglsync-ctl mode 0`并刷新status；持久回退删除`tglsyncmode=1`或改为0，
+下次手动启动生效。同分区Shell备份为`OC/config.plist.pre-sync-default1-20261116-141953`；
+完整查找与复制步骤见配置片段README。保留原插件安装前备份，不Reset NVRAM。
 
 维护者已说明：没有独立启动验证的备用 EFI，仅有曾进入过的 UEFI Shell。
 原 SyncFlip 安装任务明确要求备用 EFI，因此安装门槛尚未满足；本轮没有反复询问相同事实。

@@ -11,7 +11,8 @@
 | WhateverXe | [b00t0x/WhateverXe](https://github.com/b00t0x/WhateverXe)，BSD-3-Clause |
 | 当前 WEX 下游二进制 | [wex-modified-edition](https://github.com/xiananliu/wex-modified-edition)，模板为 release 0.8.2 RELEASE，内部版本 0.8.2；本机活动 EFI 仍为原 0.8.1 DEBUG（内部 0.8.0）；对应下游修改源码未公开 |
 | 图形运行组件 | [WhateverXe-Graphics](https://github.com/b00t0x/WhateverXe-Graphics)，本机为 v0.4.3 Metal，v0.4.4 安装包已解包比对但未安装；系统安装状态不包含在本 EFI 仓库中 |
-| 独立显卡研究 | [WhateverXe-Next](https://github.com/Minorli/WhateverXe-Next)，源码审查、BCS 诊断与 POSH 生命周期研究；不代表当前 EFI 已加载其构建 |
+| 独立显卡研究 | [WhateverXe-Next](https://github.com/Minorli/WhateverXe-Next)，源码审查、BCS 诊断与 POSH 生命周期研究；其内核恢复候选未部署，已部署独立插件单列如下 |
+| 本机事务同步插件 | `profiles/tglsyncflip-mode1`包含TGLSyncFlip 1.0.2同SHA二进制，代码固定于WhateverXe-Next `24dcd325`，BSD-3-Clause许可随附；本机已加载，原生恢复候选未部署 |
 | AirportItlwm | [OpenIntelWireless/itlwm](https://github.com/OpenIntelWireless/itlwm)；本地认证修订、源码和许可证见 [AirportItlwm](AirportItlwm/README.md) |
 | Intel 蓝牙 / 有线网络 | [IntelBluetoothFirmware](https://github.com/OpenIntelWireless/IntelBluetoothFirmware) / [IntelMausi](https://github.com/acidanthera/IntelMausi) |
 | Tahoe 音频 | [SimpleHDA](https://github.com/laobamac/SimpleHDA) |
